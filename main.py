@@ -10,37 +10,42 @@ load_dotenv()
 
 
 class TripCrew:
-    def __init__(self, origin, cities, date_range, interests):
-        self.cities = cities
+    def __init__(self, origin, destination, date_range, preferences):
         self.origin = origin
-        self.interests = interests
+        self.destination = destination
         self.date_range = date_range
+        self.preferences = preferences
 
     def run(self):
         agents = TripAgents()
         tasks = TripTasks()
 
-        city_selector_agent = agents.city_selection_agent()
-        local_expert_agent = agents.local_expert()
-        travel_concierge_agent = agents.travel_concierge()
+        local_tour_guide = agents.local_tour_guide()
+        travel_cost_researcher = agents.travel_cost_researcher()
+        travel_concierge_planner = agents.travel_concierge_planner()
 
-        identify_task = tasks.identify_task(
-            city_selector_agent,
+        gather_task = tasks.gather_local_recommendations(
+            local_tour_guide, self.destination, self.date_range, self.preferences
+        )
+        research_cost_task = tasks.research_travel_costs(
+            travel_cost_researcher,
             self.origin,
-            self.cities,
-            self.interests,
+            self.destination,
             self.date_range,
+            self.preferences,
         )
-        gather_task = tasks.gather_task(
-            local_expert_agent, self.origin, self.interests, self.date_range
-        )
-        plan_task = tasks.plan_task(
-            travel_concierge_agent, self.origin, self.interests, self.date_range
+
+        plan_task = tasks.plan_itinerary(
+            travel_concierge_planner,
+            self.origin,
+            self.destination,
+            self.date_range,
+            self.preferences,
         )
 
         crew = Crew(
-            agents=[city_selector_agent, local_expert_agent, travel_concierge_agent],
-            tasks=[identify_task, gather_task, plan_task],
+            agents=[local_tour_guide, travel_cost_researcher, travel_concierge_planner],
+            tasks=[gather_task, research_cost_task, plan_task],
             verbose=True,
         )
 
@@ -51,14 +56,14 @@ class TripCrew:
 if __name__ == "__main__":
     print("## Welcome to Trip Planner Crew")
     print("-------------------------------")
-    location = input(
+    origin = input(
         dedent("""
       From where will you be traveling from?
     """)
     )
-    cities = input(
+    destination = input(
         dedent("""
-      What are the cities options you are interested in visiting?
+      Where are you interested in visiting?
     """)
     )
     date_range = input(
@@ -66,13 +71,14 @@ if __name__ == "__main__":
       What is the date range you are interested in traveling?
     """)
     )
-    interests = input(
+    preferences = input(
         dedent("""
-      What are some of your high level interests and hobbies?
+      What are some of your travel perferences? Include things like 
+    hobbies, interests, or any special requests.
     """)
     )
 
-    trip_crew = TripCrew(location, cities, date_range, interests)
+    trip_crew = TripCrew(origin, destination, date_range, preferences)
     result = trip_crew.run()
     print("\n\n########################")
     print("## Here is you Trip Plan")

@@ -1,7 +1,10 @@
+from textwrap import dedent
+
 from crewai import Agent
 from crewai_tools import SerperDevTool, WebsiteSearchTool
 from dotenv import load_dotenv
-from langchain_community.agent_toolkits.amadeus.toolkit import AmadeusToolkit
+from langchain_community.tools.amadeus.closest_airport import AmadeusClosestAirport
+from langchain_community.tools.amadeus.flight_search import AmadeusFlightSearch
 from langchain_community.chat_models import ChatOpenAI
 
 from tools.calculator_tools import CalculatorTools
@@ -10,9 +13,9 @@ from tools.calculator_tools import CalculatorTools
 load_dotenv()
 search_tool = SerperDevTool()
 web_rag_tool = WebsiteSearchTool()
+closest_airport_tool = AmadeusClosestAirport()
+flight_search_tool = AmadeusFlightSearch()
 
-amadeus_toolkit = AmadeusToolkit()
-amadeus_tools = amadeus_toolkit.get_tools()
 
 # Load chat model
 llm = ChatOpenAI(model="gpt-4-turbo")
@@ -20,35 +23,50 @@ llm = ChatOpenAI(model="gpt-4-turbo")
 
 
 class TripAgents:
-    def city_selection_agent(self):
+    def local_tour_guide(self):
         return Agent(
-            role="City Selection Expert",
-            goal="Select the best city based on weather, season, and prices",
-            backstory="An expert in analyzing travel data to pick ideal destinations",
+            role="Local Expert at this Destination",
+            goal=dedent("""Provide the BEST insights about the destination"""),
+            backstory=dedent("""A knowledgeable local guide with extensive information
+        about the destination, it's weather forecasts, attractions, accomodations, 
+        local transportation options, and customs. Has been a local tour guide
+        at this city for decades."""),
             tools=[search_tool, web_rag_tool],
             llm=llm,
             verbose=True,
+            allow_delegation=False,
         )
 
-    def local_expert(self):
+    def travel_cost_researcher(self):
         return Agent(
-            role="Local Expert at this city",
-            goal="Provide the BEST insights about the selected city",
-            backstory="""A knowledgeable local guide with extensive information
-        about the city, it's attractions and customs""",
-            tools=[search_tool, web_rag_tool],
+            role="Travel Cost Researcher",
+            goal=dedent("""Provide accurate and precise hotel, flight, and 
+            transporation recommendations and costs for the trip"""),
+            backstory=dedent("""A precise researcher that is able to find hotel, 
+        flights, and transportation costs traveling to and within a location."""),
+            tools=[
+                closest_airport_tool,
+                flight_search_tool,
+                search_tool,
+                web_rag_tool,
+                CalculatorTools.calculate,
+            ],
             llm=llm,
             verbose=True,
+            allow_delegation=False,
         )
 
-    def travel_concierge(self):
+    def travel_concierge_planner(self):
         return Agent(
-            role="Amazing Travel Concierge",
-            goal="""Create the most amazing travel itineraries with budget and 
-        packing suggestions for the city""",
+            role="Personal Travel Concierge",
+            goal=dedent("""Curate the most amazing and personalized travel itineraries 
+            with budget, safety information, local customs information, 
+            packing suggestions, and travel tips for the city"""),
             backstory="""Specialist in travel planning and logistics with 
-        decades of experience""",
-            tools=[CalculatorTools.calculate] + amadeus_tools,
+        decades of experience. Has planned trips for thousands of highly particular 
+        clients""",
+            tools=[CalculatorTools.calculate],
             llm=llm,
             verbose=True,
+            allow_delegation=False,
         )
