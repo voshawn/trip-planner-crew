@@ -1,12 +1,12 @@
-from crewai import Task
 from textwrap import dedent
-from datetime import date
+
+from crewai import Task
 
 
-class TripTasks():
-
-  def identify_task(self, agent, origin, cities, interests, range):
-    return Task(description=dedent(f"""
+class TripTasks:
+    def identify_task(self, agent, origin, cities, interests, range):
+        return Task(
+            description=dedent(f"""
         Analyze and select the best city for the trip based 
         on specific criteria such as weather patterns, seasonal
         events, and travel costs. This task involves comparing
@@ -21,16 +21,18 @@ class TripTasks():
         Trip Date: {range}
         Traveler Interests: {interests}
       """),
-        expected_output=dedent(f"""
+            expected_output=dedent("""
         Your final answer must be a detailed
         report on the chosen city, and everything you found out
         about it, including the actual flight costs, weather 
         forecast and attractions.
         """),
-        agent=agent)
+            agent=agent,
+        )
 
-  def gather_task(self, agent, origin, interests, range):
-    return Task(description=dedent(f"""
+    def gather_task(self, agent, origin, interests, range):
+        return Task(
+            description=dedent(f"""
         As a local expert on this city you must compile an 
         in-depth guide for someone traveling there and wanting 
         to have THE BEST trip ever!
@@ -49,15 +51,17 @@ class TripTasks():
         Traveling from: {origin}
         Traveler Interests: {interests}
       """),
-        expected_output=dedent(f"""
+            expected_output=dedent("""
         The final answer must be a comprehensive city guide, 
         rich in cultural insights and practical tips, 
         tailored to enhance the travel experience.
         """),
-        agent=agent)
+            agent=agent,
+        )
 
-  def plan_task(self, agent, origin, interests, range):
-    return Task(description=dedent(f"""
+    def plan_task(self, agent, origin, interests, range):
+        return Task(
+            description=dedent(f"""
         Expand this guide into a a full 7-day travel 
         itinerary with detailed per-day plans, including 
         weather forecasts, places to eat, packing suggestions, 
@@ -76,7 +80,7 @@ class TripTasks():
         Traveling from: {origin}
         Traveler Interests: {interests}
         """),
-        expected_output=dedent(f"""
+            expected_output=dedent("""
         Your final answer MUST be a complete expanded travel plan,
         formatted as markdown, encompassing a daily schedule,
         anticipated weather conditions, recommended clothing and
@@ -84,7 +88,8 @@ class TripTasks():
         TRIP EVER, Be specific and give it a reason why you picked
         # up each place, what make them special! 
         """),
-        agent=agent)
+            agent=agent,
+        )
 
-  def __tip_section(self):
-    return "If you do your BEST WORK, I'll tip you $100!"
+    def __tip_section(self):
+        return "If you do your BEST WORK, I'll tip you $100!"
