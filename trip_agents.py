@@ -3,9 +3,9 @@ from textwrap import dedent
 from crewai import Agent
 from crewai_tools import SerperDevTool, WebsiteSearchTool
 from dotenv import load_dotenv
+from langchain_community.chat_models import ChatOpenAI
 from langchain_community.tools.amadeus.closest_airport import AmadeusClosestAirport
 from langchain_community.tools.amadeus.flight_search import AmadeusFlightSearch
-from langchain_community.chat_models import ChatOpenAI
 
 from tools.calculator_tools import CalculatorTools
 
