@@ -130,6 +130,16 @@ typing-extensions = ">=4"
 tz = ["backports.zoneinfo"]
 
 [[package]]
+name = "amadeus"
+version = "10.0.0"
+description = "Python module for the Amadeus travel APIs"
+optional = false
+python-versions = ">=3.4.8"
+files = [
+    {file = "amadeus-10.0.0.tar.gz", hash = "sha256:ea356715862d993ff12c892c59bef164fe4c5edc28bd6d114d6cc51966291c67"},
+]
+
+[[package]]
 name = "annotated-types"
 version = "0.6.0"
 description = "Reusable constraint types to use with typing.Annotated"
@@ -4965,4 +4975,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<=3.13"
-content-hash = "159bb309fe27d40ab2370d4f746c1de0e769cbaac89b9e2c4641002014f44655"
+content-hash = "af8bacae6755afaef731102dc13ad18c1ab36fec0e1d40657ba3b0adc4cc0ab3"

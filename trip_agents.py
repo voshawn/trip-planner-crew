@@ -1,8 +1,7 @@
 from crewai import Agent
 from crewai_tools import SerperDevTool, WebsiteSearchTool
 from dotenv import load_dotenv
-
-# Model selection
+from langchain_community.agent_toolkits.amadeus.toolkit import AmadeusToolkit
 from langchain_community.chat_models import ChatOpenAI
 
 from tools.calculator_tools import CalculatorTools
@@ -12,9 +11,12 @@ load_dotenv()
 search_tool = SerperDevTool()
 web_rag_tool = WebsiteSearchTool()
 
+amadeus_toolkit = AmadeusToolkit()
+amadeus_tools = amadeus_toolkit.get_tools()
 
 # Load chat model
-llm = ChatOpenAI(model="gpt-3.5-turbo")
+llm = ChatOpenAI(model="gpt-4-turbo")
+# llm = ChatOpenAI(model="gpt-3.5-turbo")
 
 
 class TripAgents:
@@ -46,9 +48,7 @@ class TripAgents:
         packing suggestions for the city""",
             backstory="""Specialist in travel planning and logistics with 
         decades of experience""",
-            tools=[
-                CalculatorTools.calculate,
-            ],
+            tools=[CalculatorTools.calculate] + amadeus_tools,
             llm=llm,
             verbose=True,
         )

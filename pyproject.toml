@@ -9,6 +9,7 @@ python =  ">=3.10,<=3.13"
 crewai = {extras = ["tools"], version = "^0.28.8"}
 python-dotenv = "1.0.0"
 langchain-community = "^0.0.34"
+amadeus = "^10.0.0"
 
 
 [tool.pyright]
