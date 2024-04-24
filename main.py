@@ -155,12 +155,30 @@ def run_crewai_app():
                packing suggestions, and travel tips for the city
         Tools = Can do basic arithmetic.""")
 
-    origin = st.text_input("From where will you be traveling from?")
-    destination = st.text_input("Where will you be traveling to?")
-    date_range = st.text_input(
-        "What is the date range you are interested in traveling?"
+    origin = st.text_input(
+        "From where will you be traveling from?",
+        placeholder="New York City",
+        help="Enter a city.",
     )
-    preferences = st.text_input("What are some of your travel perferences?")
+    destination = st.text_input(
+        "Where will you be traveling to?",
+        placeholder="Paris, France",
+        help="Enter a city.",
+    )
+    date_range = st.text_input(
+        "What is the date range you are interested in traveling?",
+        placeholder="Early July 2024",
+        help="You can be specific or general",
+    )
+    preferences = st.text_area(
+        "What are some of your travel perferences?",
+        placeholder=dedent("""My wife and I are traveling for our babymoon. 
+        We want a relaxing trip and taste some of the best french food. 
+        We would like to avoid walking too much or having to rent a car. 
+        We would like to stay in 4 star hotels that are not too expensive.
+        """),
+        help="Add a few details to be get the best personalized results.",
+    )
 
     if st.button("Run Analysis"):
         # Placeholder for stopwatch
