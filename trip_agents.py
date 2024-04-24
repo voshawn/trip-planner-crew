@@ -33,7 +33,7 @@ class TripAgents:
         at this city for decades."""),
             tools=[search_tool, web_rag_tool],
             llm=llm,
-            verbose=True,
+            verbose=False,
             allow_delegation=False,
         )
 
@@ -52,7 +52,7 @@ class TripAgents:
                 CalculatorTools.calculate,
             ],
             llm=llm,
-            verbose=True,
+            verbose=False,
             allow_delegation=False,
         )
 
@@ -67,6 +67,6 @@ class TripAgents:
         clients""",
             tools=[CalculatorTools.calculate],
             llm=llm,
-            verbose=True,
+            verbose=False,
             allow_delegation=False,
         )
