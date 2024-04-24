@@ -180,7 +180,7 @@ def run_crewai_app():
         help="Add a few details to be get the best personalized results.",
     )
 
-    if st.button("Run Analysis"):
+    if st.button("Plan My Trip!"):
         # Placeholder for stopwatch
         stopwatch_placeholder = st.empty()
 
